@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import showToast from "../../utils/showToast"
 import capitalEachWord from "../../utils/capitalEachWord"
 import { useReadData } from "../../hooks/readDataState"
+import { useAuth } from "../../hooks/authState"
 
 
 const ListItemComponent = ({ data, navigation, updater, purpose, added = false }) => {
@@ -20,6 +21,7 @@ const ListItemComponent = ({ data, navigation, updater, purpose, added = false }
         year = 2023 } = data
     const [_curr_eps, setCurrEps] = useState(curr_eps)
     const { setAniToAdd } = useReadData()
+    const { state } = useAuth()
 
     const goToAddEditForm = (value) => {
         navigation.navigate('AddEditForm', value)
@@ -32,10 +34,10 @@ const ListItemComponent = ({ data, navigation, updater, purpose, added = false }
     const upperEpisode = async () => {
         try {
             if (_curr_eps + 1 === episodes) {
-                await updateData('demoUser', mal_id, { status: 'completed', curr_eps: _curr_eps + 1 })
+                await updateData(state.user.id, mal_id, { status: 'completed', curr_eps: _curr_eps + 1 })
                 updater(mal_id, 'completed', _curr_eps + 1)
             } else {
-                await updateData('demoUser', mal_id, { curr_eps: _curr_eps + 1 })
+                await updateData(state.user.id, mal_id, { curr_eps: _curr_eps + 1 })
                 updater(mal_id, '', _curr_eps + 1)
             }
             setCurrEps(_curr_eps + 1)
@@ -47,7 +49,7 @@ const ListItemComponent = ({ data, navigation, updater, purpose, added = false }
 
     const aniAdd = () => {
         const dataToStore = {
-            airing, curr_eps:0, images, mal_id, season, title, type, year, status: 'watching', episodes
+            airing, curr_eps: 0, images, mal_id, season, title, type, year, status: 'watching', episodes
         }
         setAniToAdd(dataToStore)
         goToAddEditForm({ mal_id, added: false })
@@ -64,16 +66,16 @@ const ListItemComponent = ({ data, navigation, updater, purpose, added = false }
                 <ListItem.Title onPress={goToPreview}>{title}</ListItem.Title>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                     <Text>{`${type}, ${season ? capitalEachWord(season) : '?'} ${year ? year : '?'}`}</Text>
-                    <Text>{airing ? ('Airing') : ('')}</Text>
+                    <Text>{airing && ('Airing')}</Text>
                 </View>
-                {purpose !== 'search' ? (
+                {purpose !== 'search' && (
                     <>
                         <LinearProgress style={{ marginVertical: 10, height: 10 }} variant="determinate" value={_curr_eps / episodes} />
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
                             <Text>{_curr_eps}/{episodes} Eps</Text>
                         </View>
                     </>
-                ) : ('')}
+                )}
 
             </ListItem.Content>
             <View>

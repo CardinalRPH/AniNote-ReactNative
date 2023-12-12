@@ -8,6 +8,7 @@ import { getSpecifiedData, updateData, writeData } from "../server/firebase/hand
 import { useDataAll } from "../hooks/dataAllState";
 import showToast from "../utils/showToast";
 import { useReadData } from "../hooks/readDataState";
+import { useAuth } from "../hooks/authState";
 
 
 const buttons = ['Watching', 'Completed', 'Plan to Watch', 'On Hold', 'Dropped'];
@@ -21,16 +22,17 @@ const AddEditFormScreen = ({ route, navigation }) => {
     const [curr_eps, setCurr_eps] = useState(0);
     const { cusStateData, setCusStateData } = useDataAll()
     const { aniToAdd } = useReadData()
+    const { state } = useAuth()
     const [readValue, setReadValue] = useState({
         title: "",
         airing: false,
         episodes: 0,
     })
-
+    state.user.id
 
     const fetchData = async () => {
         try {
-            const { status, curr_eps, title, episodes, airing } = await getSpecifiedData('demoUser', mal_id)
+            const { status, curr_eps, title, episodes, airing } = await getSpecifiedData(state.user.id, mal_id)
             setSelectedIndexBGroup(buttonValues.indexOf(status))
             setReadValue({
                 title, airing, episodes
@@ -46,13 +48,13 @@ const AddEditFormScreen = ({ route, navigation }) => {
         setSelectedIndexBGroup(buttonValues.indexOf(status))
         setReadValue({
             title, airing, episodes
-        })  
+        })
         setCurr_eps(curr_eps)
     }
 
     const saveData = async () => {
         try {
-            await updateData('demoUser', mal_id, {
+            await updateData(state.user.id, mal_id, {
                 status: buttonValues[selectedIndexBGroup],
                 curr_eps
             })
@@ -68,7 +70,7 @@ const AddEditFormScreen = ({ route, navigation }) => {
     const saveNewData = async () => {
         try {
             const newData = { ...aniToAdd, curr_eps, status: buttonValues[selectedIndexBGroup] }
-            await writeData('demoUser', mal_id, newData)
+            await writeData(state.user.id, mal_id, newData)
             setCusStateData([...cusStateData, newData])
             navigation.goBack()
         } catch (error) {

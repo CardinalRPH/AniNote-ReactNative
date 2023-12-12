@@ -27,3 +27,11 @@ export const getAllDataAsync = async () => {
         console.error(error);
     }
 }
+
+export const deleteDataAsync = async (key) => {
+    try {
+        await AsyncStorage.removeItem(key)
+    } catch (error) {
+        console.error(error);
+    }
+}

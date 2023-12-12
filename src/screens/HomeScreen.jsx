@@ -9,6 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { getAllData } from "../server/firebase/handler/animeHandler";
 import { useDataAll } from "../hooks/dataAllState";
 import showToast from "../utils/showToast";
+import { useAuth } from "../hooks/authState";
 
 
 const HomeScreen = ({ navigation }) => {
@@ -19,10 +20,10 @@ const HomeScreen = ({ navigation }) => {
     const [dataOnHold, setDataOnHold] = useState([])
     const [dataDropped, setDataDropped] = useState([])
     const [dataPlanToWatch, setDataPlanToWatch] = useState([])
-
+    const { state } = useAuth()
     const fetchData = async () => {
         try {
-            const dataSnap = await getAllData('demoUser')
+            const dataSnap = await getAllData(state.user.id)
             setCusStateData(dataSnap)
             updateData(dataSnap);
         } catch (error) {
@@ -51,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fetchData()
+        state.user && fetchData()
     }, [])
 
     useEffect(() => {

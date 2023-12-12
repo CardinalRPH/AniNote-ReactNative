@@ -161,14 +161,14 @@ const PreviewScreen = ({ route, navigation }) => {
                             <CastCard data={''} />
                         )}
 
-                        {charsAniData.length > 10 ? (
+                        {charsAniData.length > 10 && (
                             <TouchableOpacity onPress={() => { console.log('Clicked') }}>
                                 <View style={{ marginVertical: 3, height: 400, width: 130, justifyContent: 'center', alignItems: 'center' }}>
                                     <Icon name="chevron-forward" size={50} type="ionicon" color='black' />
                                     <Text style={{ fontSize: 20 }}>View More</Text>
                                 </View>
                             </TouchableOpacity>
-                        ) : ('')}
+                        )}
                     </ScrollView>
                     <Text style={{ fontSize: 15, color: 'grey', marginHorizontal: 15, marginVertical: 5 }}>Staff</Text>
                     <ScrollView horizontal style={{ marginVertical: 10 }}>
@@ -177,14 +177,14 @@ const PreviewScreen = ({ route, navigation }) => {
                         )) : (
                             <CastCard data={''} />
                         )}
-                        {staffAniData.length > 10 ? (
+                        {staffAniData.length > 10 && (
                             <TouchableOpacity onPress={() => { console.log('Clicked') }}>
                                 <View style={{ marginVertical: 3, height: 200, width: 130, justifyContent: 'center', alignItems: 'center' }}>
                                     <Icon name="chevron-forward" size={50} type="ionicon" color='black' />
                                     <Text style={{ fontSize: 20 }}>View More</Text>
                                 </View>
                             </TouchableOpacity>
-                        ) : ('')}
+                        )}
 
                     </ScrollView>
                     <View style={{ margin: 10 }}>
@@ -207,24 +207,24 @@ const PreviewScreen = ({ route, navigation }) => {
                             </View>
                         </MiniContainCard>
                     </View>
-                    {aniRecomend ? aniRecomend.length > 0 ? (
+                    {aniRecomend && (aniRecomend.length > 0 && (
                         <>
                             <Text style={{ fontSize: 15, color: 'grey', marginHorizontal: 15, marginVertical: 5 }}>Recomendation</Text>
                             <ScrollView horizontal style={{ marginVertical: 10 }}>
                                 {aniRecomend.slice(0, 10).map((value, index) =>
                                     (<CastCard purpose='recom' data={value} key={index} />))}
-                                {aniRecomend.length > 10 ? (
+                                {aniRecomend.length > 10 && (
                                     <TouchableOpacity onPress={() => { console.log('Clicked') }}>
                                         <View style={{ marginVertical: 3, height: 200, width: 130, justifyContent: 'center', alignItems: 'center' }}>
                                             <Icon name="chevron-forward" size={50} type="ionicon" color='black' />
                                             <Text style={{ fontSize: 20 }}>View More</Text>
                                         </View>
                                     </TouchableOpacity>
-                                ) : ('')}
+                                )}
 
                             </ScrollView>
                         </>
-                    ) : ('') : ('')}
+                    ))}
 
                 </ScrollView>
             )}

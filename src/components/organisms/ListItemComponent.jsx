@@ -6,6 +6,7 @@ import showToast from "../../utils/showToast"
 import capitalEachWord from "../../utils/capitalEachWord"
 import { useReadData } from "../../hooks/readDataState"
 import { useAuth } from "../../hooks/authState"
+import * as Hapatics from "expo-haptics"
 
 
 const ListItemComponent = ({ data, navigation, updater, purpose, added = false }) => {
@@ -40,9 +41,11 @@ const ListItemComponent = ({ data, navigation, updater, purpose, added = false }
                 await updateData(state.user.id, mal_id, { curr_eps: _curr_eps + 1 })
                 updater(mal_id, '', _curr_eps + 1)
             }
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Success)
             setCurrEps(_curr_eps + 1)
         } catch (error) {
             showToast('error', 'Failed to Update Current Anime')
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Error)
             console.error(error);
         }
     }

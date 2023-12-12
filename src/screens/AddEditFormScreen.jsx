@@ -9,6 +9,7 @@ import { useDataAll } from "../hooks/dataAllState";
 import showToast from "../utils/showToast";
 import { useReadData } from "../hooks/readDataState";
 import { useAuth } from "../hooks/authState";
+import * as Hapatics from "expo-haptics"
 
 
 const buttons = ['Watching', 'Completed', 'Plan to Watch', 'On Hold', 'Dropped'];
@@ -28,7 +29,6 @@ const AddEditFormScreen = ({ route, navigation }) => {
         airing: false,
         episodes: 0,
     })
-    state.user.id
 
     const fetchData = async () => {
         try {
@@ -58,11 +58,13 @@ const AddEditFormScreen = ({ route, navigation }) => {
                 status: buttonValues[selectedIndexBGroup],
                 curr_eps
             })
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Success)
             updateAllData(mal_id, buttonValues[selectedIndexBGroup], curr_eps)
             navigation.goBack()
             // navigation.navigate('Home')
         } catch (error) {
             showToast('error', 'Failed to Update Current Anime')
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Error)
             console.error(error);
         }
     }
@@ -71,10 +73,12 @@ const AddEditFormScreen = ({ route, navigation }) => {
         try {
             const newData = { ...aniToAdd, curr_eps, status: buttonValues[selectedIndexBGroup] }
             await writeData(state.user.id, mal_id, newData)
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Success)
             setCusStateData([...cusStateData, newData])
             navigation.goBack()
         } catch (error) {
             showToast('error', 'Failed to Save Current Anime')
+            Hapatics.notificationAsync(Hapatics.NotificationFeedbackType.Error)
             console.error(error);
         }
     }
